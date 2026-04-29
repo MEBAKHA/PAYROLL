@@ -20,7 +20,7 @@ class ScheduleResource extends Resource
 {
     protected static ?string $model = Schedule::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::CalendarDays;
 
     protected static ?string $recordTitleAttribute = 'schedule';
 
@@ -55,4 +55,5 @@ class ScheduleResource extends Resource
             'edit' => EditSchedule::route('/{record}/edit'),
         ];
     }
+
 }
