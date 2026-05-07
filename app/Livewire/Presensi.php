@@ -8,9 +8,15 @@ use Livewire\Component;
 
 class Presensi extends Component
 {
+
+    public $latitude;
+    public $longitude;
+    public $insideRadius = 0;
+
     public function render()
     {
         $schedule = Schedule::where('user_id', Auth::id())->first();
-        return view('livewire.presensi',compact('schedule'))->layout('layouts.main');
+        $insideRadius = $this->insideRadius;
+        return view('livewire.presensi',compact('schedule', 'insideRadius'))->layout('layouts.main');
     }
 }

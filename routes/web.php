@@ -8,3 +8,6 @@ Route::get('/', function () {
 });
 
 Route::get('/presensi', Presensi::class)->middleware('auth')->name('presensi');
+Route::get('/login', function () {
+    return redirect('/dashboard/login');
+})->name('login');
