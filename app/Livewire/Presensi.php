@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Attendance;
 use App\Models\Schedule;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -49,18 +50,31 @@ class Presensi extends Component
                     'end_time' => now()->toTimeString(),
 
                 ]);
+                Notification::make()
+                    ->title('Presensi Berhasil')
+                    ->success()
+                    ->body('presensi berhasil di buat')
+                    ->send();
             } else {
                 $attendance->update([
                     'latitude' => $this->latitude,
                     'longitude' => $this->longitude,
                     'end_time' => now()->toTimeString(),
-                ]);            
+                ]);   
+
+                Notification::make()
+                    ->title('Presensi Berhasil')
+                    ->success()
+                    ->body('presensi berhasil di update')
+                    ->send();
             }
 
-            return redirect('/presensi', [
-                'schedule' => $schedule,
-                'insideRadius' => false
-            ]);
+            return redirect('/dashboard/attendances');
+
+            //return redirect('/presensi', [
+               // 'schedule' => $schedule,
+                //'insideRadius' => false
+            //]);
         }
     }
 }

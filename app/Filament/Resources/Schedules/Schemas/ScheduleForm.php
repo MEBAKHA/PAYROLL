@@ -30,10 +30,11 @@ class ScheduleForm
                         ->relationship('office', 'name')
                         ->required(),
                     Toggle::make('is_wfa')
-                    ->label('WFA')
-                    ->onIcon('heroicon-s-check-circle')
-                    ->offIcon('heroicon-s-x-circle')    
-                        
+                        ->label('WFA')
+                        ->onIcon('heroicon-s-check-circle')
+                        ->offIcon('heroicon-s-x-circle'),    
+                    Toggle::make('is_banned')
+                        ->label('banned'),    
                     ])
                 ])
             ]);
