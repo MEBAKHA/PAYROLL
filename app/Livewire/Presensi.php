@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Attendance;
 use App\Models\Schedule;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -17,7 +18,7 @@ class Presensi extends Component
 
     public function render()
     {
-        $schedule = Schedule::where('user_id', Auth::id())->first();
+        $schedule = Schedule::with(['user', 'office', 'shift'])->where('user_id', Auth::id())->first();
         $insideRadius = $this->insideRadius;
         $attendance = Attendance::where('user_id', Auth::id())->whereDate('created_at', now())->first();
 
@@ -48,6 +49,7 @@ class Presensi extends Component
                     'longitude' => $this->longitude,
                     'start_time' => now()->toTimeString(),
                     'end_time' => now()->toTimeString(),
+                    'duration' => null
 
                 ]);
                 Notification::make()
@@ -56,10 +58,14 @@ class Presensi extends Component
                     ->body('presensi berhasil di buat')
                     ->send();
             } else {
+                $startTime = Carbon::parse($attendance->start_time);
+                $end_time = Carbon::now();
+                $duration = $startTime->diff($end_time)->format('%H:%I:%S');
                 $attendance->update([
                     'latitude' => $this->latitude,
                     'longitude' => $this->longitude,
                     'end_time' => now()->toTimeString(),
+                    'duration' => $duration
                 ]);   
 
                 Notification::make()
