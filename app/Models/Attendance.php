@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
+
 class Attendance extends Model
 {
     protected $guarded = ['id'];
@@ -35,5 +36,24 @@ class Attendance extends Model
         $minutes = $duration->i;
 
         return $hours . ' jam ' . $minutes . ' menit';
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function ($attendance) {
+            if ($attendance->start_time && $attendance->end_time) {
+
+                $start = Carbon::parse($attendance->start_time);
+                $end = Carbon::parse($attendance->end_time);
+
+                if ($end->lessThan($start)) {
+                    $end->addDay();
+                }
+
+                $totalSeconds = $start->diffInSeconds($end);
+
+                $attendance->duration = gmdate('H:i:s', $totalSeconds);
+            }
+        });
     }
 }
